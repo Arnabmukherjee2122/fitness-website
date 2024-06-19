@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weight Tracker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-image: url('/Images/weight-tracker1.jpg'); /* Add your background image URL here */
+      background-size: cover;
+      background-position: center;
+    }
+
+    .container {
+      text-align: center;
+      color: #333;
+    }
+
+    .tracker {
+      background-color: rgba(255, 255, 255, 0.8); /* Set a semi-transparent background color */
+      backdrop-filter: blur(1px); /* Adjust the blur intensity as needed */
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      width: 600px; /* Increased width to accommodate the chart */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .weight-tracking {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #08a381;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #61b3a6be;
+    }
+
+    input {
+      margin-top: 10px;
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: aliceblue;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: #555;
+    }
+
+    p {
+      color: #777;
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    #weightAmount {
+      font-weight: bold;
+      font-size: 20px;
+      color: #08a381;
+    }
+
+    #goalMessage {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #08a381;
+      font-weight: bold;
+    }
+
+    canvas {
+      width: 100%;
+      max-width: 500px; /* Limit the width of the chart */
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Weight Tracker</h1>
+    <div class="tracker">
+      <div class="weight-tracking">
+        <button id="decreaseWeightBtn">-</button>
+        <button id="addWeightBtn">Add 0.5 kg</button>
+        <button id="increaseWeightBtn">+</button>
+        <input type="number" id="customWeightInput" step="0.1" placeholder="Enter custom weight (kg)">
+        <button id="customWeightBtn">Custom Weight</button>
+      </div>
+      <h2>Weight Tracking</h2>
+      <p>Current Weight: <span id="weightAmount">0</span> kg</p>
+      <div id="goalMessage"></div>
+      <canvas id="weightChart"></canvas>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const addWeightBtn = document.getElementById('addWeightBtn');
+    const increaseWeightBtn = document.getElementById('increaseWeightBtn');
+    const decreaseWeightBtn = document.getElementById('decreaseWeightBtn');
+    const customWeightBtn = document.getElementById('customWeightBtn');
+    const customWeightInput = document.getElementById('customWeightInput');
+    const weightAmountElement = document.getElementById('weightAmount');
+    const goalMessageElement = document.getElementById('goalMessage');
+    const ctx = document.getElementById('weightChart').getContext('2d');
+
+    let weightAmount = 0;
+    let day = getCurrentDay();
+    let weightTrackingData = [0]; // Initial data for the current day
+
+    // Initialize the chart
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [day],
+        datasets: [{
+          label: 'Weight (kg)',
+          data: weightTrackingData,
+          backgroundColor: '#08a381',
+        }],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 200, // Set the maximum value of the y-axis
+            stepSize: 5, // Set the step size of the y-axis
+          },
+        },
+      },
+    });
+
+    // Event listener for adding weight
+    addWeightBtn.addEventListener('click', () => {
+      weightAmount += 0.5; // Increase weight by 0.5 kg
+      updateData();
+    });
+
+    // Event listener for increasing weight
+    increaseWeightBtn.addEventListener('click', () => {
+      weightAmount += 0.1; // Increase weight by 0.1 kg
+      updateData();
+    });
+
+    // Event listener for decreasing weight
+    decreaseWeightBtn.addEventListener('click', () => {
+      weightAmount = Math.max(0, weightAmount - 0.1); // Decrease weight by 0.1 kg, but not below 0
+      updateData();
+    });
+
+    // Event listener for custom weight input
+    customWeightBtn.addEventListener('click', () => {
+      const customAmount = parseFloat(customWeightInput.value) || 0; // Parse the input as a float
+      weightAmount += customAmount;
+      updateData();
+    });
+
+    // Function to update the displayed weight
+    function updateData() {
+      weightAmountElement.textContent = weightAmount.toFixed(1); // Display weight with one decimal place
+      weightTrackingData[0] = weightAmount;
+
+      // Update the chart
+      updateChart();
+    }
+
+    // Function to update the chart
+    function updateChart() {
+      myChart.data.labels = [day];
+      myChart.data.datasets[0].data = weightTrackingData;
+      myChart.update(); // Update the chart
+    }
+
+    // Function to get the current day
+    function getCurrentDay() {
+      const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const today = new Date();
+      return daysOfWeek[today.getDay()];
+    }
+  </script>
+</body>
+</html>

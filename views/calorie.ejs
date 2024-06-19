@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Tracker</title>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: url('/Images/activities-image2.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            /* Ensure text is readable over the background */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Add a semi-transparent background for better readability */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffcc00;
+            /* Change color for better visibility */
+        }
+
+        label {
+            color: #ffcc00;
+            /* Change color for better visibility */
+        }
+
+        #exercise-type,
+        #duration,
+        #weight {
+            margin-bottom: 10px;
+        }
+
+        #calories-burnt {
+            margin-top: 20px;
+            color: #ffcc00;
+            /* Change color for better visibility */
+        }
+
+        canvas {
+            margin-top: 20px;
+            background-color: #fff;
+            /* Set background color for the canvas for better visibility */
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        button {
+            background-color: #ffcc00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #ff9900;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Calorie Tracker</h1>
+        <div>
+            <label for="exercise-type">Exercise Type:</label>
+            <select id="exercise-type">
+                <option value="running">Running</option>
+                <option value="cycling">Cycling</option>
+                <option value="swimming">Swimming</option>
+            </select>
+        </div>
+        <div>
+            <label for="duration">Duration (minutes):</label>
+            <input type="number" id="duration" min="1" value="30" onchange="calculateCalories()">
+        </div>
+        <div>
+            <label for="weight">Your Weight (kg):</label>
+            <input type="number" id="weight" min="1" value="70" onchange="calculateCalories()">
+        </div>
+        <button onclick="calculateCalories()">Calculate Calories Burnt</button>
+        <div id="calories-burnt"></div>
+        <canvas id="calories-chart"></canvas>
+    </div>
+
+    <script>
+        function calculateCalories() {
+            const exerciseType = document.getElementById('exercise-type').value;
+            const duration = parseInt(document.getElementById('duration').value);
+            const weight = parseInt(document.getElementById('weight').value);
+
+            let calorieBurnRate;
+            switch (exerciseType) {
+                case 'running':
+                    calorieBurnRate = 10; // calories burned per minute for running
+                    break;
+                case 'cycling':
+                    calorieBurnRate = 8; // calories burned per minute for cycling
+                    break;
+                case 'swimming':
+                    calorieBurnRate = 12; // calories burned per minute for swimming
+                    break;
+                default:
+                    calorieBurnRate = 0;
+            }
+
+            const totalCaloriesBurnt = calorieBurnRate * duration;
+            document.getElementById('calories-burnt').innerText = `Calories Burnt: ${totalCaloriesBurnt}`;
+
+            // Calculate calories to be burnt according to weight
+            const caloriesToBurn = weight * 30; // arbitrary multiplier, adjust according to your needs
+
+            // Get chart context
+            const ctx = document.getElementById('calories-chart').getContext('2d');
+
+            // Clear existing chart instance
+            if (window.myChart instanceof Chart) {
+                window.myChart.destroy();
+            }
+
+            // Display bar chart
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Calories Burnt', 'Calories to Burn'],
+                    datasets: [{
+                        label: 'Calories',
+                        data: [totalCaloriesBurnt, caloriesToBurn],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="nav-window.css">
+    <title>fit-0-meter</title>
+    <style>
+        .profile-icon {
+            position: absolute;
+            right: 40px;
+            top: 10px;
+            display: flex;
+        }
+
+        .profile-icon img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Contact Us</a></li>
+                
+            </ul>
+            <div class="profile-icon">
+               
+                <a href="/profile?email=<%=data.Email%>">
+                    <img src="/Images/player.gif" alt="User Profile">
+                </a>
+                &nbsp; 
+                <span><h3 style="margin-top: 12px;"> <%=data.FirstName%> <%=data.LastName%></h3></span>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>
+            Welcome to
+            <span>fit-</span>
+            <!-- <img src="/Images/logo.png" alt="Description of the image" width="40"> -->
+            <img src="../Images/logo2.gif" alt="Animated Image" width="50">
+            <span>-meter</span>
+        </h1>
+        <p>Your journey to a healthier you starts here.</p>
+        
+        <div class="circles-container">
+            <div class="outer-circle">
+                <div class="inner-circle">
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="background-section">
+        <div class="background-image" style="background-image: url('home-background.jpg');"></div>
+    </section>
+
+    <!--
+    <section class="background-section">
+        
+        <video autoplay muted loop id="video-background">
+            <source src="/Videos/home-background.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </section>
+    -->
+
+    <section class="features">
+        <div class="feature">
+            <img src="/Images/activities-logo.png" alt="Activities">
+            <h2><a href="/activities?email=<%=data.Email%>">Activities</a></h2>
+            <p>Discover a variety of workout routines to reach your fitness goals.</p>
+        </div>
+        <div class="feature">
+            <img src="/Images/diet-logo.png" alt="Diet Plan">
+            <h2><a href="/diet?email=<%=data.Email%>">Diet Plan</a></h2>
+            <p>Access nutrition plans and recipes to support your healthy lifestyle.</p>
+        </div>
+        <div class="feature">
+            <img src="/Images/tracker-logo.png" alt="Tracker">
+            <h2><a href="/tracker?email=<%=data.Email%>">Tracker</a></h2>
+            <p>Track your fitness journey and check your progress for your daily routine.</p>
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2023 fit-0-meter. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

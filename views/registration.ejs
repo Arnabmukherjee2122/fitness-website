@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="">
+    <style>
+        /* Reset some default styles */
+        body,
+        h1,
+        h2,
+        p,
+        form,
+        label,
+        input,
+        button {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Apply a basic styling for the body */
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+        }
+
+        /* Hero section styles */
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: #e2e2e2;
+        }
+
+        .hero h1 {
+            font-size: 2.5em;
+        }
+
+        .hero p {
+            margin-top: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        /* Background section styles */
+        .background-section {
+            height: 1200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background-image {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        /* Features section styles */
+        .features {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .feature {
+            text-align: center;
+            margin: 20px;
+            flex: 1 1 300px;
+            /* Flexible width, with a maximum width of 300px */
+        }
+
+        .feature img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Registration form styles */
+        .registration-section {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .registration-form {
+            max-width: 400px;
+            /* Increased width */
+            width: 100%;
+            /* Ensure form takes up full width of its container */
+            margin: 0 20px;
+            /* Add some margin for spacing */
+            padding: 20px;
+            background-color: rgba(226, 226, 226, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .registration-form h2 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .registration-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .registration-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .registration-form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .registration-form button:hover {
+            background-color: #45a049;
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        /* Media queries for responsiveness */
+        @media only screen and (max-width: 600px) {
+
+            /* Adjust styles for small screens (e.g., mobile phones) */
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .feature {
+                flex: 1 1 100%;
+            }
+
+            .registration-form {
+                padding: 10px;
+                max-width: 90%;
+                /* Ensure form fits well on small screens */
+            }
+
+            .registration-form input,
+            .registration-form button {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="hero">
+        <h1>Welcome to Our Website</h1>
+        <p>Join us today by filling out the form below</p>
+    </div>
+
+    <div class="background-section">
+        <img src="/Images/registration.jpg" alt="Background" class="background-image">
+        <section class="registration-section">
+            <div class="registration-form">
+                <h2>Register</h2>
+                <form action="save" method="post">
+                    <label for="firstname">First Name:</label>
+                    <input type="text" id="firstname" name="FirstName" required>
+
+                    <label for="lastname">Last Name:</label>
+                    <input type="text" id="lastname" name="LastName" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="Email" required>
+
+                    <label for="age">Age:</label>
+                    <input type="age" id="age" name="Age" required>
+
+                    <label for="weight">Weight:</label>
+                    <input type="weight" id="weight" name="Weight" required placeholder="In kgs">
+
+                    <label for="height">Height:</label>
+                    <input type="height" id="height" name="Height" required placeholder="In cms">
+
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="Password" required>
+
+                    <label for="confirm-password">Confirm Password:</label>
+                    <input type="password" id="confirm-password" name="Confirm Password" required>
+
+                    <button type="submit" class="cta-button">Register</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Your Website. All Rights Reserved.</p>
+    </footer>
+
+</body>
+
+</html>

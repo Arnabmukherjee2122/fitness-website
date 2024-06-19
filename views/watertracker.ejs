@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Tracker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-image: url('/Images/water-tracker1.jpg');
+      /* Add your background image URL here */
+      background-size: cover;
+      background-position: center;
+    }
+
+    .container {
+      text-align: center;
+      color: #333;
+    }
+
+    .tracker {
+      background-color: rgba(255, 255, 255, 0.8);
+      /* Set a semi-transparent background color */
+      backdrop-filter: blur(1px);
+      /* Adjust the blur intensity as needed */
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      width: 600px;
+      /* Increased width to accommodate the chart */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .water-intake {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #2b89c9;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #75f100be;
+    }
+
+    input {
+      margin-top: 10px;
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: #555;
+    }
+
+    p {
+      color: #777;
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    #waterAmount {
+      font-weight: bold;
+      font-size: 20px;
+      color: #2b89c9;
+    }
+
+    #goalMessage {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #2b89c9;
+      font-weight: bold;
+    }
+
+    canvas {
+      width: 100%;
+      max-width: 500px;
+      /* Limit the width of the chart */
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container"> 
+    <h1>Water Tracker</h1>
+    <div class="tracker">
+      <div class="water-intake">
+        <div class="first" style="display: flex; gap: 10px;">
+          <button id="decreaseWaterBtn">-</button>
+          <button id="addWaterBtn">Add 200ml</button>
+          <button id="increaseWaterBtn">+</button>
+        </div>
+        <input type="number" id="customWaterInput" placeholder="Enter custom intake (ml)">
+        <button id="customWaterBtn">Custom Intake</button>
+      </div>
+      <button id="saveData">Save</button>
+
+      <h2>Water Intake</h2>
+      <p>Amount Consumed: <span id="waterAmount">0</span> ml</p>
+      <div id="goalMessage"></div>
+      <canvas id="waterChart"></canvas>
+    </div>
+
+    
+    <input type="hidden" id="userEmail" value="<%=email%>">
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const addWaterBtn = document.getElementById('addWaterBtn');
+    const increaseWaterBtn = document.getElementById('increaseWaterBtn');
+    const decreaseWaterBtn = document.getElementById('decreaseWaterBtn');
+    const customWaterBtn = document.getElementById('customWaterBtn');
+    const customWaterInput = document.getElementById('customWaterInput');
+    const waterAmountElement = document.getElementById('waterAmount');
+    const goalMessageElement = document.getElementById('goalMessage');
+    const saveDataBtn = document.getElementById('saveData');
+    const ctx = document.getElementById('waterChart').getContext('2d');
+    const email = document.getElementById("userEmail").value;
+
+    console.log("email in water page is  " + email);
+
+    let waterAmount = 0;
+    let day = getCurrentDay();
+    let waterIntakeData = [0]; // Initial data for the current day
+
+    // Initialize the chart
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [day],
+        datasets: [{
+          label: 'Water Intake (ml)',
+          data: waterIntakeData,
+          backgroundColor: '#2b89c9',
+        }],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 5000, // Set the maximum value of the y-axis
+            stepSize: 100, // Set the step size of the y-axis
+          },
+        },
+      },
+    });
+
+    // Event listener for adding water
+    addWaterBtn.addEventListener('click', () => {
+      waterAmount += 200; // Increase water intake by 250ml
+      updateData();
+    });
+
+    // Event listener for increasing water
+    increaseWaterBtn.addEventListener('click', () => {
+      waterAmount += 100; // Increase water intake by 100ml
+      updateData();
+    });
+
+    // Event listener for decreasing water
+    decreaseWaterBtn.addEventListener('click', () => {
+      waterAmount = Math.max(0, waterAmount - 100); // Decrease water intake by 100ml, but not below 0
+      updateData();
+    });
+
+    // Event listener for custom water intake
+    customWaterBtn.addEventListener('click', () => {
+      const customAmount = parseInt(customWaterInput.value, 10) || 0; // Parse the input as an integer
+      waterAmount += customAmount;
+      updateData();
+    });
+
+    // Event listener for saving data
+    saveDataBtn.addEventListener('click', async () => {
+      try {
+        const response = await fetch('/savewater', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email,
+            waterAmount
+          })
+        });
+
+        if (response.ok) {
+          alert('Water intake data saved successfully.');
+        } else {
+          alert('Failed to save water intake data.');
+        }
+      } catch (error) {
+        console.error('Error saving water intake data:', error);
+        alert('An error occurred while saving water intake data.');
+      }
+    });
+
+    // Function to update the displayed water amount
+    function updateData() {
+      waterAmountElement.textContent = waterAmount;
+      waterIntakeData[0] = waterAmount;
+
+      // Check if the goal is achieved
+      if (waterAmount >= 5000) {
+        goalMessageElement.textContent = 'Congratulations! You have achieved your goal!';
+        playAnimation();
+      } else {
+        goalMessageElement.textContent = ''; // Clear the goal message
+      }
+
+      // Update the chart
+      updateChart();
+    }
+
+    // Function to get the current day
+    function getCurrentDay() {
+      const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const today = new Date();
+      return daysOfWeek[today.getDay()];
+    }
+
+    // Function to update the chart
+    function updateChart() {
+      myChart.data.labels = [day];
+      myChart.data.datasets[0].data = waterIntakeData;
+      myChart.update(); // Update the chart
+    }
+
+    // Function to play the animation
+    function playAnimation() {
+      // Add your animation here (e.g., show a modal, change CSS properties, etc.)
+    }
+
+    // Function to check and display notification every 2 hours
+    function checkAndDisplayNotification() {
+      const now = new Date();
+      const hours = now.getHours();
+
+      // Check if the current time is between 7 AM and 11 PM
+      if (hours >= 7 && hours <= 23) {
+        // Check if it has been 2 hours since the last notification
+        if ((hours - 7) % 2 === 0) {
+          // Display the notification
+          showNotification("Reminder: You need to drink water!");
+        }
+      }
+    }
+
+    // Function to show a notification
+    function showNotification(message) {
+      // You can customize this part based on how you want to show the notification
+      alert(message);
+    }
+
+    // Set interval to check and display notification every 2 hours
+    setInterval(checkAndDisplayNotification, 1000 * 60 * 60 * 2); // 2 hours in milliseconds
+  </script>
+</body>
+
+</html>

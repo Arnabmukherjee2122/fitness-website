@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-size: cover;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .dropdown {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .dropdown select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 30px;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns%3D%22http%3A//www.w3.org/2000/svg%22 viewBox%3D%220 0 140 140%22 width%3D%2220%22 height%3D%2220%22%3E%3Cpolygon points%3D%2250,35 90,35 70,85%22 fill%3D%22%23000000%22/%3E%3C/svg%3E');
+            background-repeat: no-repeat;
+            background-position: calc(100% - 10px) center;
+            background-size: 10px;
+        }
+
+        .data-input {
+            margin-bottom: 20px;
+            position: relative;
+            width: calc(50% - 10px);
+            display: inline-block;
+            padding: 0 10px;
+        }
+
+        .data-box {
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            display: inline-block;
+            width: calc(20% - 10px);
+            margin-right: 10px;
+            vertical-align: top;
+            margin-top: 20px;
+        }
+
+        .button-container {
+            text-align: center;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ff1100;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 0 5px;
+        }
+
+        .button:hover {
+            background-color: #00b303;
+        }
+
+        .box-container {
+            text-align: center;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+        }
+
+        .data-box {
+            background-color: #ffcc00;
+        }
+
+        .data-box:nth-child(2) {
+            background-color: #3399ff;
+        }
+
+        .data-box:nth-child(3) {
+            background-color: #ff6666;
+        }
+
+        .data-box:nth-child(4) {
+            background-color: #66cc99;
+        }
+
+        .data-box:nth-child(5) {
+            background-color: #9966ff;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <form id="timerForm" action="/save-time" method="post"> -->
+
+        <div class="box-container">
+            <div class="data-box">
+                <label for="height">Height:</label>
+                <div class="data-input">
+                    <input type="number" id="height" name="height" placeholder="Enter height in cm">
+                </div>
+            </div>
+            <div class="data-box">
+                <label for="weight">Weight:</label>
+                <div class="data-input">
+                    <input type="number" id="weight" name="weight" placeholder="Enter weight in kg">
+                </div>
+            </div>
+            <div class="data-box">
+                <label for="bmi">BMI:</label>
+                <span id="bmi">Calculate BMI after entering height and weight</span>
+                <input type="hidden" name="bmi" id="bmi">
+            </div>
+            <div class="data-box">
+                <label for="heart-points">Heart Points:</label>
+                <span id="heart-points">0</span>
+                <input type="hidden" name="heart-points" id="heart-points1">
+            </div>
+            <div class="data-box">
+                <label for="heart-rate">Heart Rate:</label>
+                <span id="heart-rate">0 bpm</span>
+            </div>
+        </div>
+    
+        <div class="container">
+            <h1>Activity Tracker</h1>
+            <div class="dropdown">
+                <label for="activity">Select Activity:</label>
+                <select id="activity" name="activity" onchange="resetTimer()">
+                    <option value="" selected>Select Activity</option>
+                    <option value="walking">Walking</option>
+                    <option value="running">Running</option>
+                    <option value="swimming">Swimming</option>
+                    <option value="cycling">Cycling</option>
+                </select>
+            </div>
+            <div class="timer" id="timer">00:00:00</div>
+            <input type="hidden" name="timer" id="timer1">
+
+            <div class="distance" id="distance">Distance: 0.000 km</div>
+            <input type="hidden" name="distance" id="distance1">
+
+            <div class="steps" id="steps">Steps: 0</div>
+            <input type="hidden" name="steps" id="steps1">
+
+            <div class="button-container">
+                <button class="button" id="start" onclick="startTimer()">Start</button>
+                <button class="button" id="stop" onclick="stopTimer()">Stop</button>
+                <button class="button" id="reset" onclick="resetTimer()">Reset</button>
+                <button class="button" id="resume" onclick="resumeTimer()">Resume</button>
+                <!-- <button class="button"  type="submit">Submit</button> -->
+
+            </div>
+        </div>
+    <!-- </form> -->
+
+    <script>
+        let timerInterval;
+        let startTime;
+        let elapsedTime = 0;
+        let isRunning = false;
+        let distance_km = 0;
+        let steps = 0;
+        let activity = '';
+
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                startTime = new Date().getTime();
+                activity = document.getElementById('activity').value;
+                timerInterval = setInterval(updateTimer, 1000);
+                console.log("here"+timerInterval)
+            }
+        }
+
+        function stopTimer() {
+            if (isRunning) {
+                clearInterval(timerInterval);
+                elapsedTime += new Date().getTime() - startTime;
+                isRunning = false;
+
+                const y = document.getElementById('timer1').value 
+                
+                console.log("timmer is "+y)
+                
+                
+            }
+        }
+
+        function resumeTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                startTime = new Date().getTime();
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            elapsedTime = 0;
+            distance_km = 0;
+            steps = 0;
+            document.getElementById('timer').innerText = '00:00:00';
+            document.getElementById('distance').innerText = 'Distance: 0.000 km';
+            document.getElementById('steps').innerText = 'Steps: 0';
+            document.getElementById('heart-points').innerText = '0';
+            document.getElementById('heart-rate').innerText = '0 bpm';
+        }
+
+        function updateTimer() {
+            let currentTime = new Date().getTime();
+            let timeDifference = currentTime - startTime + elapsedTime;
+            let hours = Math.floor(timeDifference / (1000 * 60 * 60));
+            let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+            document.getElementById('timer').innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            switch (activity) {
+                case 'walking':
+                    distance_km = timeDifference / 720000;
+                    steps = Math.floor(timeDifference / 1000 * 1.5);
+                   
+                    break;
+                case 'running':
+                    distance_km = timeDifference / 300000;
+                    steps = Math.floor(timeDifference / 1000 * 2);
+                    break;
+                case 'swimming':
+                    distance_km = timeDifference / 1800000;
+                    steps = Math.floor(timeDifference / 1000 * 0.5);
+                    break;
+                case 'cycling':
+                    distance_km = timeDifference / 600000;
+                    steps = Math.floor(timeDifference / 1000);
+                    break;
+                default:
+                    distance_km = 0;
+                    steps = 0;
+            }
+
+            document.getElementById('distance').innerText = `Distance: ${distance_km.toFixed(3)} km`;
+            document.getElementById('steps').innerText = `Steps: ${steps}`;
+            updateHeartData(timeDifference);
+        }
+
+        
+        function updateHeartData(timeDifference) {
+            let heartPoints = Math.floor(timeDifference / 60000); // 1 heart point per minute
+            let heartRate = 60 + Math.floor(Math.random() * 40); // Random heart rate between 60 and 100 bpm
+
+            document.getElementById('heart-points').innerText = `${heartPoints}`;
+            document.getElementById('heart-rate').innerText = `${heartRate} bpm`;
+        }
+
+        function calculateBMI() {
+            let height = parseFloat(document.getElementById('height').value);
+            let weight = parseFloat(document.getElementById('weight').value);
+            if (isNaN(height) || isNaN(weight) || height <= 0 || weight <= 0) {
+                document.getElementById('bmi').innerText = 'Please enter valid height and weight';
+            } else {
+                let bmi = weight / ((height / 100) * (height / 100));
+                document.getElementById('bmi').innerText = bmi.toFixed(2);
+                document.getElementById('bmi').value = bmi.toFixed(2);
+                const x = document.getElementById('bmi').value;
+                console.log(x);
+            }
+        }
+
+        document.getElementById('height').addEventListener('input', calculateBMI);
+        document.getElementById('weight').addEventListener('input', calculateBMI);
+
+        document.getElementById('activity').addEventListener('change', function () {
+            resetTimer();
+            let selectedActivity = this.value;
+            let imageUrl;
+            switch (selectedActivity) {
+                case 'walking':
+                    imageUrl = 'url("../Images/walking.jpg")';
+                    break;
+                case 'running':
+                    imageUrl = 'url("../Images/running.jpg")';
+                    break;
+                case 'swimming':
+                    imageUrl = 'url("../Images/swimming.jpg")';
+                    break;
+                case 'cycling':
+                    imageUrl = 'url("../Images/cycling.jpg")';
+                    break;
+                default:
+                    imageUrl = 'url("../Images/activity.jpg")';
+            }
+            document.body.style.backgroundImage = imageUrl;
+        });
+
+        document.getElementById('start').addEventListener('click', startTimer);
+        document.getElementById('stop').addEventListener('click', stopTimer);
+        document.getElementById('reset').addEventListener('click', resetTimer);
+        document.getElementById('resume').addEventListener('click', resumeTimer);
+
+        
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,384 @@
+diet updated
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet Plan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('../Images/diet-plan.jpg');
+            /* Add your background image URL here */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            text-align: center;
+            color: #333;
+        }
+
+        .diet-plan {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(1px);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1200px;
+            /* Increased max-width to accommodate three columns */
+        }
+
+        .category-box {
+            margin: 0 10px;
+            /* Added margin for spacing between columns */
+            flex-grow: 1;
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f2f2f2;
+        }
+
+        .veggies {
+            order: 1;
+            /* veggies column order */
+        }
+
+        .fruit {
+            order: 2;
+            /* fruit column order */
+        }
+
+        .meat {
+            order: 3;
+            /* meat column order */
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        input {
+            margin-top: 10px;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #4CAF50;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        p {
+            color: #777;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        #weightAmount {
+            font-weight: bold;
+            font-size: 20px;
+            color: #4CAF50;
+        }
+
+        #goalMessage {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 2px solid #333;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            border-bottom: 2px solid #333;
+        }
+
+        .selected {
+            background-color: #a7ff83 !important;
+        }
+
+        .selected-items-box {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            max-width: 300px;
+            text-align: left;
+        }
+
+        .selected-items-box h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Diet Plan</h1>
+        <div class="diet-plan">
+            <div class="category-box meat">
+                <h3>Meat</h3>
+                <table id="meatChart">
+                    <thead>
+                        <tr>
+                            <th>Food</th>
+                            <th>Calories (per 100g)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Meat chart content will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="category-box fruit">
+                <h3>Fruit</h3>
+                <table id="fruitChart">
+                    <thead>
+                        <tr>
+                            <th>Food</th>
+                            <th>Calories (per 100g)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Fruit chart content will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="category-box veggies">
+                <h3>Veggies</h3>
+                <table id="veggiesChart">
+                    <thead>
+                        <tr>
+                            <th>Food</th>
+                            <th>Calories (per 100g)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Veggies chart content will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <form id="calorieForm">
+                <label for="weight">Enter Your Weight (in kilograms):</label><br>
+                <input type="number" id="weight" name="weight" min="1" required><br>
+                <button type="submit">Calculate Calorie Intake</button>
+            </form>
+
+            <div id="calorieResult" style="display:none;">
+                <h2>Your Daily Calorie Intake:</h2>
+                <p id="calorieValue"></p>
+            </div>
+
+            <div class="selected-items-box" id="selectedItemsBox" style="display:none;">
+                <h3>Selected Food Items</h3>
+                <ul id="selectedItemsList"></ul>
+                <p>Total Calories: <span id="totalCalories">0</span> calories</p>
+                <button id="saveButton">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calorieForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var weight = parseInt(document.getElementById('weight').value);
+            var calorieResult = document.getElementById('calorieResult');
+            var calorieValue = document.getElementById('calorieValue');
+            var selectedItemsBox = document.getElementById('selectedItemsBox');
+            var selectedItemsList = document.getElementById('selectedItemsList');
+            var totalCalories = document.getElementById('totalCalories');
+            var veggiesChart = document.getElementById('veggiesChart').getElementsByTagName('tbody')[0];
+            var meatChart = document.getElementById('meatChart').getElementsByTagName('tbody')[0];
+            var fruitChart = document.getElementById('fruitChart').getElementsByTagName('tbody')[0];
+            var selectedCalories = 0;
+
+            // Calculate daily calorie intake based on weight (assuming sedentary lifestyle)
+            var dailyCalories = weight * 24;
+
+            // Display the calculated calorie intake
+            calorieValue.textContent = "Your Daily Calorie Intake: " + dailyCalories + " calories";
+
+            // Show the diet chart
+            calorieResult.style.display = 'block';
+            selectedItemsBox.style.display = 'block';
+
+            // Clear previous diet charts and selected items
+            veggiesChart.innerHTML = '';
+            meatChart.innerHTML = '';
+            fruitChart.innerHTML = '';
+            selectedItemsList.innerHTML = '';
+            totalCalories.textContent = 0;
+
+            // Define food categories
+            var categories = {
+                "Veggies": ["Broccoli", "Spinach", "Sweet Potato", "Carrot", "Tomatoes", "Bell Peppers", "Cucumber", "Lettuce", "Zucchini", "Onion", "Garlic", "Radish", "Asparagus", "Cabbage", "Eggplant"],
+                "Meat": ["Chicken Breast", "Salmon", "Beef", "Shrimp", "Turkey", "Pork", "Bacon"],
+                "Fruit": ["Avocado", "Banana", "Apple", "Blueberries", "Oranges", "Grapes", "Strawberries", "Raspberries", "Watermelon", "Pineapple", "Kiwi", "Mango", "Peach", "Apricot", "Pear", "Cantaloupe", "Honeydew Melon"]
+                // Add more categories and items as needed
+            };
+
+            // Food items with their calorie content
+            var foods = [
+                { name: "Broccoli", calories: 34 },
+                { name: "Spinach", calories: 23 },
+                { name: "Sweet Potato", calories: 86 },
+                { name: "Carrot", calories: 41 },
+                { name: "Tomatoes", calories: 18 },
+                { name: "Bell Peppers", calories: 31 },
+                { name: "Cucumber", calories: 15 },
+                { name: "Lettuce", calories: 15 },
+                { name: "Zucchini", calories: 17 },
+                { name: "Onion", calories: 40 },
+                { name: "Garlic", calories: 149 },
+                { name: "Radish", calories: 16 },
+                { name: "Asparagus", calories: 20 },
+                { name: "Cabbage", calories: 25 },
+                { name: "Eggplant", calories: 25 },
+                { name: "Chicken Breast", calories: 165 },
+                { name: "Salmon", calories: 208 },
+                { name: "Beef", calories: 250 },
+                { name: "Shrimp", calories: 99 },
+                { name: "Turkey", calories: 120 },
+                { name: "Pork", calories: 242 },
+                { name: "Bacon", calories: 541 },
+                { name: "Avocado", calories: 160 },
+                { name: "Banana", calories: 90 },
+                { name: "Apple", calories: 52 },
+                { name: "Blueberries", calories: 57 },
+                { name: "Oranges", calories: 47 },
+                { name: "Grapes", calories: 67 },
+                { name: "Strawberries", calories: 32 },
+                { name: "Raspberries", calories: 53 },
+                { name: "Watermelon", calories: 30 },
+                { name: "Pineapple", calories: 50 },
+                { name: "Kiwi", calories: 61 },
+                { name: "Mango", calories: 60 },
+                { name: "Peach", calories: 39 },
+                { name: "Apricot", calories: 48 },
+                { name: "Pear", calories: 57 },
+                { name: "Cantaloupe", calories: 34 },
+                { name: "Honeydew Melon", calories: 36 }
+                // Add more food items as needed
+            ];
+
+            // Add diet chart items for each category
+            for (var category in categories) {
+                categories[category].forEach(function (foodName) {
+                    var food = foods.find(food => food.name === foodName);
+                    if (food) {
+                        var chart;
+                        switch (category) {
+                            case "Veggies":
+                                chart = veggiesChart;
+                                break;
+                            case "Meat":
+                                chart = meatChart;
+                                break;
+                            case "Fruit":
+                                chart = fruitChart;
+                                break;
+                            default:
+                                chart = veggiesChart;
+                                break;
+                        }
+
+                        var row = chart.insertRow();
+                        var nameCell = row.insertCell(0);
+                        var calorieCell = row.insertCell(1);
+                        nameCell.textContent = food.name;
+                        calorieCell.textContent = food.calories + " calories";
+                        row.addEventListener('mouseover', function () {
+                            if (selectedCalories + food.calories <= dailyCalories) {
+                                row.classList.add('selected');
+                            }
+                        });
+                        row.addEventListener('mouseout', function () {
+                            if (!row.classList.contains('perma-selected')) {
+                                row.classList.remove('selected');
+                            }
+                        });
+                        row.addEventListener('click', function () {
+                            if (selectedCalories + food.calories <= dailyCalories) {
+                                selectedCalories += food.calories;
+                                var listItem = document.createElement('li');
+                                listItem.textContent = food.name + ": " + food.calories + " calories";
+                                selectedItemsList.appendChild(listItem);
+                                totalCalories.textContent = selectedCalories;
+
+                                row.classList.add('selected');
+                                row.classList.add('perma-selected');
+                                if (selectedCalories >= dailyCalories) {
+                                    var rows = chart.getElementsByTagName('tr');
+                                    for (var i = 0; i < rows.length; i++) {
+                                        rows[i].removeEventListener('mouseover', function () { });
+                                        rows[i].removeEventListener('mouseout', function () { });
+                                        rows[i].removeEventListener('click', function () { });
+                                        rows[i].classList.remove('selected');
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        document.getElementById('saveButton').addEventListener('click', function () {
+            alert('Diet plan saved!');
+        });
+    </script>
+</body>
+</html>

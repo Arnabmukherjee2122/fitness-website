@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('/Images/profile.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .profile-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .user-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+            border: 2px solid #ddd;
+        }
+
+        .user-details,
+        .overview {
+            margin-bottom: 20px;
+        }
+
+        .user-details h2,
+        .overview h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .user-details p {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .overview-item {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .overview {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="profile-container">
+        <header class="profile-header">
+            <img src="/Images/be-active.gif" alt="User Icon" class="user-icon">
+            <h1>User Profile</h1>
+        </header>
+
+        <section class="user-details">
+            <h2>User Details</h2>
+            <p><strong>First Name:</strong> <input type="text" id="user-FirstName" placeholder="Enter your name" value="<%=user.FirstName%>"></p>
+            <p><strong>Last Name:</strong> <input type="text" id="user-LastName" placeholder="Enter your email" value="<%=user.LastName%>"></p>
+            <p><strong>Age:</strong> <input type="number" id="user-age" placeholder="Enter your age" value="<%=user.Age%>"></p>
+            <p><strong>Height:</strong> <input type="text" id="user-height" placeholder="Enter your height (e.g., 5'9\"
+                    ) value="<%=user.Height%>""></p>
+            <p><strong>Weight:</strong> <input type="text" id="user-weight"
+                    placeholder="Enter your weight (e.g., 70kg)" value="<%=user.Weight%>"></p>
+           
+        </section>
+
+
+        <section class="activities">
+            <h2><%=user.FirstName%>'s Activities</h2>
+            <% if (myData.length > 0) { %>
+                <ul>
+                    <% myData.forEach(activity => { %>
+                        <li>
+                            <strong>Activity : </strong> <%=activity.selectedActivity%><br>
+                            <strong>Elapsed Time : </strong> <%=activity.elapsedTime%> Second<br>
+                            <strong>Steps : </strong> <%=activity.steps%><br>
+                            <strong>Distance : </strong> <%=activity.distance%> km<br>
+                            <strong>Heart Points : </strong> <%=activity.heartPoints%> per minutes<br>
+                            <strong>Date : </strong> <%=activity.createdAt%><br/><br/>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <p>No activities found</p>
+            <% } %>
+        </section>
+ 
+        <section class="activities">
+            <h2><%=user.FirstName%>'s Water Track's</h2>
+            <% if (waterDetails.length > 0) { %>
+                <ul>
+                    <% waterDetails.forEach(data => { %>
+                        <li>
+                            <strong>Date : </strong> <%=data.createdAt%><br>
+                            <strong>Today water consumed : </strong> <%=data.waterAmount%> ML<br><br>
+                          
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <p>No activities found</p>
+            <% } %>
+</section>
+    </div>
+
+    <script>
+        // Example JavaScript for handling form submission and saving user
+        document.querySelector('.submit-btn').addEventListener('click', function () {
+            const name = document.getElementById('user-name').value;
+            const email = document.getElementById('user-email').value;
+            const age = document.getElementById('user-age').value;
+            const height = document.getElementById('user-height').value;
+            const weight = document.getElementById('user-weight').value;
+
+            // Implement the save functionality here
+            console.log('User details saved:', { name, email, age, height, weight });
+        });
+        
+    </script>
+</body>
+
+</html>

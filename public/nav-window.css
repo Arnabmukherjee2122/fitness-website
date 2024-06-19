@@ -1,0 +1,198 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Basic styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header and navigation */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem 0;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nav a[href="index.html"] {
+    font-weight: bold;
+    color: #ff7f50;
+}
+
+nav ul li {
+    margin: 0 1rem;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #ff7f50;
+}
+
+/* Home link styling */
+nav a[href="index.html"] {
+    font-weight: bold;
+    color: #ff7f50; /* Change the color as needed */
+}
+
+/* Hero section */
+.hero {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 2rem;
+    word-spacing: 0.0em;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background-color: #ff7f50;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #ff6347;
+}
+
+/* Circles section */
+.circles-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.outer-circle {
+    width: 170px;
+    height: 160px;
+    background-color: transparent;
+    border: 5px solid #ff7f50;
+    border-radius: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.inner-circle {
+    top: 50%;
+    left: 50%;
+    background-color: #ff7f5000;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display : flex;
+}
+.inner-circle span{
+    width: 50px;
+    height: 80px;
+    background: rgba(230, 129, 176, 0.801);
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+}
+.inner-circle span:nth-child(1){
+    transform: rotate(-45deg) translateX(20px);
+}
+.inner-circle span:nth-child(2){
+    transform: rotate(45deg) translateX(-20px);
+}
+/* Features section */
+.features {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 0;
+    background-color: #fff;
+}
+
+.feature {
+    text-align: center;
+    margin: 0 2rem;
+}
+
+.feature img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 3px solid #ff7f50;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.feature h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.feature p {
+    font-size: 1rem;
+    color: #666;
+}
+
+/* Add animation to features */
+.features .feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.features .feature:nth-child(1) { animation: fadeInUp 1.0s 1.0s forwards; }
+.features .feature:nth-child(2) { animation: fadeInUp 1.0s 1.5s forwards; }
+.features .feature:nth-child(3) { animation: fadeInUp 1.5s 2.0s forwards; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1rem 0;
+    background-color: #333;
+    color: #fff;
+}
+

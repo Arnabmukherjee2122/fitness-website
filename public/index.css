@@ -1,0 +1,142 @@
+/* Reset some default styles */
+body, h1, h2, p {
+    margin: 0;
+    padding: 0;
+}
+
+/* Apply a basic styling for the body */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+}
+
+/* Header styles */
+header {
+    background-color: #333;
+    color: rgb(255, 255, 255);
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+}
+
+nav a {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+}
+
+/* Hero section styles */
+.hero {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.hero h1 {
+    font-size: 2.5em;
+}
+
+.hero p {
+    margin-top: 20px;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+
+
+
+.background-section {
+    height: 1200px; 
+    position: relative;
+    overflow: hidden;
+}
+
+.background-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    z-index: -1; 
+    opacity: 0.8; 
+}
+
+@media only screen and (max-width: 600px) {
+    .background-section {
+        height: 300px;
+    }
+}
+
+/*
+#video-background {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%; 
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+}
+
+
+@media screen and (max-width: 767px) {
+    #video-background {
+        width: 100%; 
+        height: auto;
+    }
+}
+*/
+
+/* Features section styles */
+.features {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.feature {
+    text-align: center;
+    margin: 20px;
+    flex: 1 1 300px; /* Flexible width, with a maximum width of 300px */
+}
+
+.feature img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Footer styles */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Media queries for responsiveness */
+@media only screen and (max-width: 600px) {
+    /* Adjust styles for small screens (e.g., mobile phones) */
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .hero h1 {
+        font-size: 2em;
+    }
+    
+    .feature {
+        flex: 1 1 100%;
+    }
+}

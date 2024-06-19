@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-size: cover;
+        }
+
+         .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            height: 50%;
+              margin: 150px auto;
+              background-color: rgba(255, 255, 255, 0.8);
+        } 
+        
+
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #timer {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .data-box {
+            margin: 10px 0;
+        }
+
+        .dropdown {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .dropdown select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 30px;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns%3D%22http%3A//www.w3.org/2000/svg%22 viewBox%3D%220 0 140 140%22 width%3D%2220%22 height%3D%2220%22%3E%3Cpolygon points%3D%2250,35 90,35 70,85%22 fill%3D%22%23000000%22/%3E%3C/svg%3E');
+            background-repeat: no-repeat;
+            background-position: calc(100% - 10px) center;
+            background-size: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="timer">00:00:00</div>
+        <button id="startButton">Start</button>
+        <button id="pauseResumeButton" disabled>Pause</button>
+        <button id="saveButton" disabled>Save</button>
+        <div class="dropdown">
+            <select id="activitySelect">
+                <option >SELECT ACTIVITY</option>
+                <option value="walking">walking</option>
+                <option value="running">running</option>
+                <option value="swimming">swimming</option>
+                <option value="cycling">cycling</option>
+            </select>
+        </div>
+
+        <input type="number" id="heightInput" placeholder="Height (cm)">
+        <input type="number" id="weightInput" placeholder="Weight (kg)">
+        <input type="number" id="pulseInput" placeholder="Pulse Rate (bpm)">
+
+        <div class="data-box">
+            <label for="heart-points">Heart Points:</label>
+            <span id="heart-points">0 </span>
+            <input type="hidden" name="heart-points" id="heart-points1">
+        </div>
+        <div class="data-box">
+            <label for="heart-rate">Heart Rate:</label>
+            <span id="heart-rate">0 bpm</span>
+        </div>
+
+        <div class="distance" id="distance">Distance: 0.000 km</div>
+        <input type="hidden" name="distance" id="distance1">
+
+        <div class="steps" id="steps">Steps: 0</div>
+        <input type="hidden" name="steps" id="steps1">
+
+        <input type="hidden" id="elapsedTime">
+        <input type="hidden" id="userEmail" value="<%= email %>">
+    </div>
+
+    <script>
+        let startTime;
+        let pausedTime = 0;
+        let timerInterval;
+        let isPaused = false;
+        let distance_km = 0;
+        let steps = 0;
+
+        const timerDisplay = document.getElementById('timer');
+        const startButton = document.getElementById('startButton');
+        const pauseResumeButton = document.getElementById('pauseResumeButton');
+        const saveButton = document.getElementById('saveButton');
+        const elapsedTimeInput = document.getElementById('elapsedTime');
+        const activitySelect = document.getElementById('activitySelect');
+
+        const heightInput = document.getElementById('heightInput');
+        const weightInput = document.getElementById('weightInput');
+        const pulseInput = document.getElementById('pulseInput');
+
+        const heartPointsSpan = document.getElementById('heart-points');
+        const heartPointsInput = document.getElementById('heart-points1');
+
+        const heartRateSpan = document.getElementById('heart-rate');
+        const distanceDisplay = document.getElementById('distance');
+        const stepsDisplay = document.getElementById('steps');
+
+        const email = document.getElementById('userEmail').value;
+
+        function formatTime(time) {
+            const hours = String(Math.floor(time / 3600)).padStart(2, '0');
+            const minutes = String(Math.floor((time % 3600) / 60)).padStart(2, '0');
+            const seconds = String(time % 60).padStart(2, '0');
+            return `${hours}:${minutes}:${seconds}`;
+        }
+
+        function startTimer() {
+            startTime = Date.now() - pausedTime;
+            timerInterval = setInterval(() => {
+                const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                timerDisplay.textContent = formatTime(elapsedTime);
+                updateActivityMetrics(elapsedTime);
+            }, 1000);
+            startButton.disabled = true;
+            pauseResumeButton.disabled = false;
+            saveButton.disabled = false;
+        }
+
+        function pauseResumeTimer() {
+            if (isPaused) {
+                startTimer();
+                pauseResumeButton.textContent = 'Pause';
+                isPaused = false;
+            } else {
+                clearInterval(timerInterval);
+                pausedTime = Date.now() - startTime;
+                pauseResumeButton.textContent = 'Resume';
+                isPaused = true;
+            }
+        }
+
+        function calculateBMI(height, weight) {
+            return (weight / ((height / 100) ** 2)).toFixed(2);
+        }
+
+        function updateHeartMetrics(elapsedTime) {
+            const heartPoints = Math.floor(elapsedTime / 60); // 1 heart point per minute
+            const heartRate = 60 + Math.floor(Math.random() * 40); // Random heart rate between 60 and 100 bpm
+
+            heartPointsSpan.innerText = `${heartPoints} /sec`;
+            heartRateSpan.innerText = `${heartRate} bpm`;
+
+            heartPointsInput.value = heartPoints;
+        }
+
+        function updateActivityMetrics(elapsedTime) {
+            const activity = activitySelect.value;
+
+            switch (activity) {
+                case 'walking':
+                    distance_km = (elapsedTime / 3600) * 5; // 5 km per hour
+                    steps = elapsedTime * 1.4; // 1.4 steps per second
+                    break;
+                case 'running':
+                    distance_km = (elapsedTime / 3600) * 9; // 9 km per hour
+                    steps = elapsedTime * 2.5; // 2.5 steps per second
+                    break;
+                case 'swimming':
+                    distance_km = (elapsedTime / 3600) * 2; // 2 km per hour
+                    steps = elapsedTime * 0.5; // Rough approximation
+                    break;
+                case 'cycling':
+                    distance_km = (elapsedTime / 3600) * 20; // 20 km per hour
+                    steps = elapsedTime * 0.25; // Rough approximation
+                    break;
+            }
+
+            distanceDisplay.innerText = `Distance: ${distance_km.toFixed(3)} km`;
+            stepsDisplay.innerText = `Steps: ${Math.floor(steps)}`;
+
+            updateHeartMetrics(elapsedTime);
+        }
+
+        async function saveTime() {
+            clearInterval(timerInterval);
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+            const selectedActivity = activitySelect.value;
+            elapsedTimeInput.value = elapsedTime;
+
+            const height = parseFloat(heightInput.value);
+            const weight = parseFloat(weightInput.value);
+            const pulseRate = parseInt(pulseInput.value);
+            const bmi = calculateBMI(height, weight);
+
+            const heartPoints = parseInt(heartPointsSpan.textContent);
+            const heartRate = parseInt(heartRateSpan.textContent);
+
+            const response = await fetch('/saveTime', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    elapsedTime,
+                    selectedActivity,
+                    email,
+                    heartPoints,
+                    distance: distance_km.toFixed(3),
+                    steps: Math.floor(steps)
+                })
+            });
+
+            if (response.ok) {
+                alert(`Time saved: ${formatTime(elapsedTime)}`);
+            } else {
+                alert('Failed to save time');
+            }
+
+            startButton.disabled = false;
+            pauseResumeButton.disabled = true;
+            saveButton.disabled = true;
+            pauseResumeButton.textContent = 'Pause';
+            isPaused = false;
+            pausedTime = 0;
+            timerDisplay.textContent = '00:00:00';
+
+            heartPointsSpan.innerText = '0 /sec';
+            heartRateSpan.innerText = '0 bpm';
+            distanceDisplay.innerText = 'Distance: 0.000 km';
+            stepsDisplay.innerText = 'Steps: 0';
+        }
+
+        document.getElementById('activitySelect').addEventListener('change', function () {
+            let selectedActivity = this.value;
+            let imageUrl;
+            switch (selectedActivity) {
+                case 'walking':
+                    imageUrl = 'url("../Images/walking.jpg")';
+                    break;
+                case 'running':
+                    imageUrl = 'url("../Images/running.jpg")';
+                    break;
+                case 'swimming':
+                    imageUrl = 'url("../Images/swimming.jpg")';
+                    break;
+                case 'cycling':
+                    imageUrl = 'url("../Images/cycling.jpg")';
+                    break;
+                default:
+                    imageUrl = 'url("../Images/activity.jpg")';
+            }
+            document.body.style.backgroundImage = imageUrl;
+        });
+
+        startButton.addEventListener('click', startTimer);
+        pauseResumeButton.addEventListener('click', pauseResumeTimer);
+        saveButton.addEventListener('click', saveTime);
+    </script>
+
+</body>
+
+</html>
